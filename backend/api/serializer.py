@@ -1,15 +1,12 @@
 import base64
 
 from django.core.files.base import ContentFile
-from djoser.serializers import UserSerializer
+from django.shortcuts import get_object_or_404
+from djoser.serializers import UserCreateSerializer, UserSerializer
+from recipes.models import (Favorite, Follow, Ingredient, IngredientInRecipe,
+                            Recipe, ShoppingCart, Tag, TagInRecipe)
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from djoser.serializers import UserCreateSerializer
-
-from recipes.models import (
-    Tag, Ingredient, Recipe, IngredientInRecipe,
-    Follow, TagInRecipe, Favorite, ShoppingCart,
-)
 from users.models import User
 
 
@@ -90,16 +87,18 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id',
-        'tags',
-        'author',
-        'ingredients',
-        'is_favorited',
-        'is_in_shopping_cart',
-        'name',
-        'image',
-        'text',
-        'cooking_time',)
+        fields = (
+            'id',
+            'tags',
+            'author',
+            'ingredients',
+            'is_favorited',
+            'is_in_shopping_cart',
+            'name',
+            'image',
+            'text',
+            'cooking_time',
+        )
 
     def get_is_favorited(self, obj):
         """Проверка на добавление в избранное."""
@@ -180,16 +179,23 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                     'Ингредиенты должны быть уникальными!'
                 )
             lst_ingredient.append(ingredient['id'])
-
         return data
-
 
     def create_ingredients(self, ingredients, recipe):
         """Создание ингредиента"""
         ingredients_list = []
         for element in ingredients:
-            ingredients_list.append(IngredientInRecipe(element=get_object_or_404(
-                Ingredient, id = element['id'], amount = element['amount']))
+            ingredients_list.append(
+                IngredientInRecipe
+                (
+                    element=get_object_or_404
+                    (
+                        Ingredient,
+                        id=element['id'],
+                        amount=element['amount']
+                    )
+                )
+            )
             IngredientInRecipe.objects.bulk_create(ingredients_list)
 
     def create_tags(self, tags, recipe):

@@ -3,29 +3,23 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from rest_framework import viewsets, status
+from recipes.models import (Favorite, Follow, Ingredient, IngredientInRecipe,
+                            Recipe, ShoppingCart, Tag)
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import (
-    AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
-)
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
-from recipes.models import (
-    Ingredient, Tag, Recipe, Favorite, ShoppingCart, Follow,
-    IngredientInRecipe,
-)
 from users.models import User
+
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrReadOnly
-from .serializer import (
-    TagSerializer,
-    IngredientSerializer,
-    RecipeSerializer, CustomUserSerializer, CreateRecipeSerializer,
-    FollowSerializer, AddFavoritesSerializer,
-)
+from .serializer import (AddFavoritesSerializer, CreateRecipeSerializer,
+                         CustomUserSerializer, FollowSerializer,
+                         IngredientSerializer, RecipeSerializer, TagSerializer)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -167,11 +161,18 @@ class RecipeViewSet(ModelViewSet):
                 {'errors': f'В избранном нет рецепта \"{recipe.name}\"'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    @action(methods=['POST'], detail=True)
+    def shopping_cart(self, request, *args, **kwargs):
+        return self.favorite(request, *args, **kwargs)
+
     @shopping_cart.mapping.delete
     def shopping_cart_delete(self, request, pk):
+        user = request.user.pk,
+        recipe = self.get_recipe()
         obj = Favorite.objects.filter(
-            user=request.user.pk,
-            recipe=self.get_recipe()
+            user,
+            recipe
         )
         if not obj:
             raise Response(
