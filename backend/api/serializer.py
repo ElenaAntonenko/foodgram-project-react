@@ -183,28 +183,14 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
         return data
 
+
     def create_ingredients(self, ingredients, recipe):
         """Создание ингредиента"""
-
+        ingredients_list = []
         for element in ingredients:
-            id = element['id']
-            ingredient = Ingredient.objects.get(pk=id)
-            amount = element['amount']
-            IngredientInRecipe.objects.bulk_create(
-                ingredient=ingredient, recipe=recipe, amount=amount
-            )
-
-    batch_size = 100
-    objs = (Entry(headline='Test %s' % i) for i in range(1000))
-    while True:
-        batch = list(islice(objs, batch_size))
-        if not batch:
-            break
-        Entry.objects.bulk_create(batch, batch_size)
-
-
-
-
+            ingredients_list.append(IngredientInRecipe(element=get_object_or_404(
+                Ingredient, id = element['id'], amount = element['amount']))
+            IngredientInRecipe.objects.bulk_create(ingredients_list)
 
     def create_tags(self, tags, recipe):
         """Метод добавления тега"""
