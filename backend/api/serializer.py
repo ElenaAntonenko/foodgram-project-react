@@ -7,6 +7,7 @@ from recipes.models import (Favorite, Follow, Ingredient, IngredientInRecipe,
                             Recipe, ShoppingCart, Tag, TagInRecipe)
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+
 from users.models import User
 
 
@@ -196,7 +197,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                     )
                 )
             )
-            IngredientInRecipe.objects.bulk_create(ingredients_list)
+        IngredientInRecipe.objects.bulk_create(ingredients_list)
 
     def create_tags(self, tags, recipe):
         """Метод добавления тега"""
