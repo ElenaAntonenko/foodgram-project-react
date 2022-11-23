@@ -154,7 +154,6 @@ class RecipeViewSet(ModelViewSet):
                            f'он уже есть в избранном у пользователя'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            favorites_subscription = Favorite.objects.create(user=user, recipe=recipe)
             serializer = AddFavoritesSerializer(recipe)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -213,8 +212,8 @@ class RecipeViewSet(ModelViewSet):
         )
         if shopping.exists():
             shopping.delete()
-            return Response(f'Вы удалили рецепт',
-                            status=status.HTTP_204_NO_CONTENT)
+            return Response('Вы удалили рецепт,'
+                            'status=status.HTTP_204_NO_CONTENT')
 
     @staticmethod
     def ingredients_to_txt(ingredients):
