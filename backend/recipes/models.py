@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    """Модель для описания тега"""
+    """Модель для описания тега."""
 
     name = models.CharField(
         max_length=50,
@@ -45,7 +45,7 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    """Модель для описания ингредиента"""
+    """Модель для описания ингредиента."""
 
     name = models.CharField(
         max_length=200,
@@ -66,7 +66,7 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель для описания рецепта"""
+    """Модель для описания рецепта."""
 
     author = models.ForeignKey(
         User,
@@ -119,7 +119,7 @@ class Recipe(models.Model):
 
 
 class IngredientInRecipe(models.Model):
-    """Модель для описания количества ингредиентов в отдельном рецепте"""
+    """Модель для описания количества ингредиентов в отдельном рецепте."""
 
     recipe = models.ForeignKey(
         Recipe,
@@ -182,7 +182,7 @@ class TagInRecipe(models.Model):
 
 
 class ShoppingCart(models.Model):
-    """Модель для описания формирования покупок """
+    """Модель для описания формирования покупок."""
 
     user = models.ForeignKey(
         User,
@@ -211,7 +211,7 @@ class ShoppingCart(models.Model):
 
 
 class Follow(models.Model):
-    """ Модель для создания подписок на автора"""
+    """ Модель для создания подписок на автора."""
 
     author = models.ForeignKey(
         User,
