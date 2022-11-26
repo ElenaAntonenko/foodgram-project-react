@@ -43,6 +43,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ('^name',)
     pagination_class = None
 
+
 User = get_user_model()
 
 
