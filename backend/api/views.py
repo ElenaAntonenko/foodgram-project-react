@@ -93,7 +93,6 @@ class UsersViewSet(mixins.ListModelMixin,
             self.permission_classes = [permissions.IsAuthenticated]
         return super().get_permissions()
 
-
     @action(['get'], detail=False)
     def me(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.request.user)
