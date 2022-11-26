@@ -11,22 +11,21 @@ class IngredientFilter(FilterSet):
 
     class Meta:
         model = Ingredient
-        fields = ('name', )
+        fields = ('name',)
 
 
 class RecipeFilter(django_filters.FilterSet):
     """ Отображение избранного и списка покупок"""
-
     tags = django_filters.filters.ModelMultipleChoiceFilter(
         queryset=Tag.objects.all(),
         field_name='tags__slug',
         to_field_name='slug')
     is_favorited = django_filters.filters.NumberFilter(
-        method='is_recipe_in_favorites_filter')
+        method='get_is_favorited')
     is_in_shopping_cart = django_filters.filters.NumberFilter(
-        method='is_recipe_in_shoppingcart_filter')
+        method='get_is_in_shopping_cart')
 
-    def is_recipe_in_favorites_filter(self, queryset, name, value):
+    def get_is_favorited(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             if self.data.get('is_favorited') == '1':
                 return self.queryset.filter(
