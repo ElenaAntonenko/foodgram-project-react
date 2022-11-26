@@ -172,7 +172,7 @@ docker-compose exec backend python manage.py add_ingidients_from_data
 | Добавлять/удалять/редактировать ингредиенты.                                                                              | :x: | :x: | :heavy_check_mark: |
 | Добавлять/удалять/редактировать теги.                                                                                     | :x: | :x: | :heavy_check_mark: |
 
-
+хост: http://foodgramapp.hopto.org/recipes
 ### Автор:  
 _Antonenko Elena_<br>
 **email**: _aeg-99@yandex.ru_<br>
